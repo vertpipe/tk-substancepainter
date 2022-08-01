@@ -28,28 +28,28 @@ Item {
 
   function log_info(message)
   {
-    alg.log.info("Shotgun bridge: " + message.toString());
+    alg.log.info("ShotGrid bridge: " + message.toString());
   }
- 
+
   function log_warning(message)
   {
-    alg.log.warning("Shotgun bridge: " + message.toString());
+    alg.log.warning("ShotGrid bridge: " + message.toString());
   }
- 
+
   function log_debug(message)
   {
     if (root.debug)
-      alg.log.info("(DEBUG) Shotgun bridge: " + message.toString());
+      alg.log.info("(DEBUG) ShotGrid bridge: " + message.toString());
   }
- 
+
   function log_error(message)
   {
-    alg.log.error("Shotgun bridge: " + message.toString());
+    alg.log.error("ShotGrid bridge: " + message.toString());
   }
- 
+
   function log_exception(message)
   {
-    alg.log.exception("Shotgun bridge: " + message.toString());
+    alg.log.exception("ShotGrid bridge: " + message.toString());
   }
 
   function registerCallback(command, callback) {
@@ -88,7 +88,7 @@ Item {
       alg.log.warn(qsTr("Can't send \"%1\" result for message  \"%2\" as there is no client connected").arg(result).arg(message_id));
       return;
     }
-    try 
+    try
     {
       jsonData = {"jsonrpc": "2.0", "result": result, "id": message_id};
       log_debug("Sending Response:" + JSON.stringify(jsonData));
@@ -132,7 +132,7 @@ Item {
         try {
           jsonData = JSON.parse(message);
           message_id = jsonData.id
-          command = jsonData.method.toUpperCase(); 
+          command = jsonData.method.toUpperCase();
         }
         catch(err) {
           alg.log.warn(qsTr("Command connection received badly formated message starting with: \"%1\"...: %2")
@@ -153,7 +153,7 @@ Item {
         }
         else
         {
-          log_debug("Message received was ignored: " + message)        
+          log_debug("Message received was ignored: " + message)
         }
         root.jsonMessageReceived(command, jsonData);
       })

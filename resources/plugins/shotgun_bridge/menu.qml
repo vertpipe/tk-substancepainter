@@ -1,5 +1,5 @@
 // Substance Painter menu in the toolbar.
-// We track is the engine has been loaded and enable/diable the Shotgun icon
+// We track is the engine has been loaded and enable/diable the ShotGrid icon
 // accordingly.
 
 // __author__ = "Diego Garcia Huerta"
@@ -16,7 +16,7 @@ Button {
   antialiasing: true
   height: 32
   width: 32
-  tooltip: "Open Shotgun Menu"
+  tooltip: "Open ShotGrid Menu"
   property var clickedPosition: null
   property bool isEngineLoaded: false
   property bool isHovered: false
@@ -68,7 +68,7 @@ Button {
           control.clicked()
         }
         else{
-          alg.log.warn("SubstancePainter Shotgun Engine is being loaded. Please wait...");
+          alg.log.warn("SubstancePainter ShotGrid Engine is being loaded. Please wait...");
         }
       }
   }

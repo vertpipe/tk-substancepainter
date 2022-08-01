@@ -1,7 +1,7 @@
 {
-	"description": "Shotgun Software Engine for Substance Painter. Allows communication with Shotgun toolkit. Author: Diego Garcia Huerta",
+	"description": "ShotGrid Software Engine for Substance Painter. Allows communication with ShotGrid toolkit. Author: Diego Garcia Huerta",
 	"url": "https://github.com/diegogarciahuerta/tk-substancepainter",
 	"version": "1.0.0",
-	"license": "<a href=\"https://github.com/diegogarciahuerta/tk-substancepainter/blob/master/LICENSE\">SHOTGUN PIPELINE TOOLKIT SOURCE CODE LICENSE</a>",
+	"license": "<a href=\"https://github.com/diegogarciahuerta/tk-substancepainter/blob/master/LICENSE\">SHOTGRID PIPELINE TOOLKIT SOURCE CODE LICENSE</a>",
 	"min_api_version": "1.1.3"
 }

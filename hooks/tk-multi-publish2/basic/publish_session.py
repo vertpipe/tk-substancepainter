@@ -1,13 +1,3 @@
-# Copyright (c) 2017 Shotgun Software Inc.
-#
-# CONFIDENTIAL AND PROPRIETARY
-#
-# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
-# Source Code License included in this distribution package. See LICENSE.
-# By accessing, using, copying or modifying this work you indicate your
-# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
-# not expressly granted therein are reserved by Shotgun Software Inc.
-
 import os
 
 import sgtk
@@ -42,11 +32,11 @@ class SubstancePainterSessionPublishPlugin(HookBaseClass):
         contain simple html for formatting.
         """
 
-        loader_url = "https://support.shotgunsoftware.com/hc/en-us/articles/219033078"
+        loader_url = "https://developer.shotgridsoftware.com/a4c0a4f1/?title=Loader"
 
         return """
-        Publishes the file to Shotgun. A <b>Publish</b> entry will be
-        created in Shotgun which will include a reference to the file's current
+        Publishes the file to ShotGrid. A <b>Publish</b> entry will be
+        created in ShotGrid which will include a reference to the file's current
         path on disk. If a publish template is configured, a copy of the
         current session will be copied to the publish template path which
         will be the file that is published. Other users will be able to access
@@ -61,7 +51,7 @@ class SubstancePainterSessionPublishPlugin(HookBaseClass):
         file to the next version after publishing.
 
         The <code>version</code> field of the resulting <b>Publish</b> in
-        Shotgun will also reflect the version number identified in the filename
+        ShotGrid will also reflect the version number identified in the filename
         The basic worklfow recognizes the following version formats by default:
 
         <ul>
@@ -137,7 +127,7 @@ class SubstancePainterSessionPublishPlugin(HookBaseClass):
         List of item types that this plugin is interested in.
 
         Only items matching entries in this list will be presented to the
-        accept() method. Strings can contain glob patters such as *, for 
+        accept() method. Strings can contain glob patters such as *, for
         example ["substancepainter.*", "file.substancepainter"]
         """
         return ["substancepainter.session"]
@@ -145,7 +135,7 @@ class SubstancePainterSessionPublishPlugin(HookBaseClass):
     def accept(self, settings, item):
         """
         Method called by the publisher to determine if an item is of any
-        interest to this plugin. Only items matching the filters defined via 
+        interest to this plugin. Only items matching the filters defined via
         the item_filters property will be presented to this method.
 
         A publish task will be generated for each item accepted here. Returns a
@@ -196,7 +186,7 @@ class SubstancePainterSessionPublishPlugin(HookBaseClass):
         boolean to indicate validity.
 
         :param settings: Dictionary of Settings. The keys are strings, matching
-                         the keys returned in the settings property. The values 
+                         the keys returned in the settings property. The values
                          are `Setting` instances.
         :param item: Item to process
         :returns: True if item is valid, False otherwise.

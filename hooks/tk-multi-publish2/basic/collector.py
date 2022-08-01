@@ -1,13 +1,3 @@
-# Copyright (c) 2017 Shotgun Software Inc.
-#
-# CONFIDENTIAL AND PROPRIETARY
-#
-# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
-# Source Code License included in this distribution package. See LICENSE.
-# By accessing, using, copying or modifying this work you indicate your
-# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
-# not expressly granted therein are reserved by Shotgun Software Inc.
-
 import os
 
 import sgtk
@@ -25,7 +15,7 @@ SESSION_PUBLISHED_TYPE = "Substance Painter Project File"
 
 class SubstancePainterSessionCollector(HookBaseClass):
     """
-    Collector that operates on the substance painter session. Should inherit 
+    Collector that operates on the substance painter session. Should inherit
     from the basic collector hook.
     """
 
@@ -90,7 +80,7 @@ class SubstancePainterSessionCollector(HookBaseClass):
 
     def process_current_session(self, settings, parent_item):
         """
-        Analyzes the current session open in Substance Painter and parents a 
+        Analyzes the current session open in Substance Painter and parents a
         subtree of items under the parent_item passed in.
 
         :param dict settings: Configured settings for this collector

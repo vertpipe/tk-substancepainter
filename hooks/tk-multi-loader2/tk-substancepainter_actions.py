@@ -1,15 +1,5 @@
-# Copyright (c) 2015 Shotgun Software Inc.
-#
-# CONFIDENTIAL AND PROPRIETARY
-#
-# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
-# Source Code License included in this distribution package. See LICENSE.
-# By accessing, using, copying or modifying this work you indicate your
-# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
-# not expressly granted therein are reserved by Shotgun Software Inc.
-
 """
-Hook that loads defines all the available actions, broken down by publish type. 
+Hook that loads defines all the available actions, broken down by publish type.
 """
 
 import os
@@ -94,21 +84,21 @@ class SubstancePainterActions(HookBaseClass):
         - If it will be shown in the details area, "details" is passed.
         - If it will be shown in the history area, "history" is passed.
 
-        Please note that it is perfectly possible to create more than one 
+        Please note that it is perfectly possible to create more than one
         action "instance" for an action!
-        You can for example do scene introspectionvif the action passed in 
+        You can for example do scene introspectionvif the action passed in
         is "character_attachment" you may for examplevscan the scene, figure
         out all the nodes where this object can bevattached and return a list
         of action instances: "attach to left hand",v"attach to right hand" etc.
         In this case, when more than  one object isvreturned for an action, use
         the params key to pass additional data into the run_action hook.
 
-        :param sg_publish_data: Shotgun data dictionary with all the standard
-                                publish fields. 
+        :param sg_publish_data: ShotGrid data dictionary with all the standard
+                                publish fields.
         :param actions: List of action strings which have been
-                        defined in the app configuration. 
+                        defined in the app configuration.
         :param ui_area: String denoting the UI Area (see above).
-        :returns List of dictionaries, each with keys name, params, caption 
+        :returns List of dictionaries, each with keys name, params, caption
          and description
         """
 
@@ -154,11 +144,11 @@ class SubstancePainterActions(HookBaseClass):
         Each entry will have the following values:
 
             name: Name of the action to execute
-            sg_publish_data: Publish information coming from Shotgun
+            sg_publish_data: Publish information coming from ShotGrid
             params: Parameters passed down from the generate_actions hook.
 
         .. note::
-            This is the default entry point for the hook. It reuses the 
+            This is the default entry point for the hook. It reuses the
             ``execute_action`` method for backward compatibility with hooks
              written for the previous version of the loader.
 
@@ -181,11 +171,11 @@ class SubstancePainterActions(HookBaseClass):
         """
         Execute a given action. The data sent to this be method will
         represent one of the actions enumerated by the generate_actions method.
-        
+
         :param name: Action name string representing one of the items returned
                      by generate_actions.
         :param params: Params data, as specified by generate_actions.
-        :param sg_publish_data: Shotgun data dictionary with all the standard
+        :param sg_publish_data: ShotGrid data dictionary with all the standard
                                 publish fields.
         :returns: No return value expected.
         """
@@ -203,4 +193,4 @@ class SubstancePainterActions(HookBaseClass):
 
         usage = params
         engine = sgtk.platform.current_engine()
-        result = engine.app.import_project_resource(path, usage, "Shotgun")
+        result = engine.app.import_project_resource(path, usage, "ShotGrid")
