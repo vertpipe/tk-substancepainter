@@ -74,41 +74,51 @@ def to_new_version_system(version):
 
 # adapted from:
 # https://stackoverflow.com/questions/2270345/finding-the-version-of-an-application-from-python
-def get_file_info(filename, info):
-    """
-    Extract information from a file.
-    """
-    import array
-    from ctypes import windll, create_string_buffer, c_uint, string_at, byref
+# def get_file_info(filename, info):
+#     """
+#     Extract information from a file.
+#     """
+#     import array
+#     from ctypes import windll, create_string_buffer, c_uint, string_at, byref
+#
+#     # Get size needed for buffer (0 if no info)
+#     size = windll.version.GetFileVersionInfoSizeA(filename, None)
+#     # If no info in file -> empty string
+#     if not size:
+#         return ""
+#
+#     # Create buffer
+#     res = create_string_buffer(size)
+#     # Load file informations into buffer res
+#     windll.version.GetFileVersionInfoA(filename, None, size, res)
+#     r = c_uint()
+#     l = c_uint()
+#     # Look for codepages
+#     windll.version.VerQueryValueA(res, "\\VarFileInfo\\Translation", byref(r), byref(l))
+#     # If no codepage -> empty string
+#     if not l.value:
+#         return ""
+#
+#     # Take the first codepage (what else ?)
+#     codepages = array.array("H", string_at(r.value, l.value))
+#     codepage = tuple(codepages[:2].tolist())
+#
+#     # Extract information
+#     windll.version.VerQueryValueA(
+#         res, ("\\StringFileInfo\\%04x%04x\\" + info) % codepage, byref(r), byref(l)
+#     )
+#     return string_at(r.value, l.value)
 
-    # Get size needed for buffer (0 if no info)
-    size = windll.version.GetFileVersionInfoSizeA(filename, None)
-    # If no info in file -> empty string
-    if not size:
-        return ""
+from win32api import *
+def get_file_info(filename):
 
-    # Create buffer
-    res = create_string_buffer(size)
-    # Load file informations into buffer res
-    windll.version.GetFileVersionInfoA(filename, None, size, res)
-    r = c_uint()
-    l = c_uint()
-    # Look for codepages
-    windll.version.VerQueryValueA(res, "\\VarFileInfo\\Translation", byref(r), byref(l))
-    # If no codepage -> empty string
-    if not l.value:
-        return ""
+    File_information = GetFileVersionInfo(filename, "\\")
 
-    # Take the first codepage (what else ?)
-    codepages = array.array("H", string_at(r.value, l.value))
-    codepage = tuple(codepages[:2].tolist())
+    ms_file_version = File_information['FileVersionMS']
+    ls_file_version = File_information['FileVersionLS']
 
-    # Extract information
-    windll.version.VerQueryValueA(
-        res, ("\\StringFileInfo\\%04x%04x\\" + info) % codepage, byref(r), byref(l)
-    )
-    return string_at(r.value, l.value)
-
+    return [str(HIWORD(ms_file_version)), str(LOWORD(ms_file_version)),
+            str(HIWORD(ls_file_version)), str(LOWORD(ls_file_version))]
 
 def md5(fname):
     hash_md5 = hashlib.md5()
@@ -215,7 +225,7 @@ class SubstancePainterLauncher(SoftwareLauncher):
 
     EXECUTABLE_TEMPLATES = {
         "darwin": ["/Applications/Allegorithmic/Substance Painter.app"],
-        "win32": ["C:/Program Files/Allegorithmic/Substance Painter/Substance Painter.exe"],
+        "win32": ["C:/Program Files/Adobe/Adobe Substance 3D Painter/Adobe Substance 3D Painter.exe"],
         "linux2": [
             "/usr/Allegorithmic/Substance Painter",
             "/usr/Allegorithmic/Substance_Painter/Substance Painter",
@@ -440,7 +450,8 @@ class SubstancePainterLauncher(SoftwareLauncher):
                 # extract the matched keys form the key_dict (default to None
                 # if not included)
                 if sys.platform == "win32":
-                    executable_version = get_file_info(executable_path, "FileVersion")
+                    # executable_version = get_file_info(executable_path, "FileVersion")
+                    executable_version = ".".join(get_file_info(executable_path))
                     # make sure we remove those pesky \x00 characters
                     executable_version = executable_version.strip("\x00")
                 else:
