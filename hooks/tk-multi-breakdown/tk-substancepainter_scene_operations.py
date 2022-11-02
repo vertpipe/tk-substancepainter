@@ -1,13 +1,3 @@
-# Copyright (c) 2013 Shotgun Software Inc.
-#
-# CONFIDENTIAL AND PROPRIETARY
-#
-# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
-# Source Code License included in this distribution package. See LICENSE.
-# By accessing, using, copying or modifying this work you indicate your
-# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
-# not expressly granted therein are reserved by Shotgun Software Inc.
-
 import os
 
 import sgtk
@@ -29,10 +19,10 @@ class SubstancePainterResource(str):
     """
     Helper Class to store metadata per update item.
 
-    tk-multi-breakdown requires item['node'] to be a str. This is what is displayed in 
+    tk-multi-breakdown requires item['node'] to be a str. This is what is displayed in
     the list of recognized items to update. We want to add metadata to each item
     as what we want to display as name is not the actual item to update.
-    In our case, we want to display the nguiname of the resrouce, color in green 
+    In our case, we want to display the nguiname of the resrouce, color in green
     the items in used in the project, and also the resource id for reference.
     As a str is required we are forced to inherit from str instead of the more
     python friendly object + __repr__ magic method.
@@ -60,7 +50,7 @@ class BreakdownSceneOperations(HookBaseClass):
     """
     Breakdown operations for Substance Painter.
 
-    This implementation handles detection of Substance Painter resources, 
+    This implementation handles detection of Substance Painter resources,
     that have been loaded with the tk-multi-loader2 toolkit app.
     """
 
@@ -92,8 +82,8 @@ class BreakdownSceneOperations(HookBaseClass):
         to analyze the current scene and return a list of references that are
         to be potentially operated on.
 
-        The return data structure is a list of dictionaries. Each scene 
-        reference that is returned should be represented by a dictionary with 
+        The return data structure is a list of dictionaries. Each scene
+        reference that is returned should be represented by a dictionary with
         three keys:
 
         - "attr": The filename attribute of the 'node' that is to be operated
@@ -105,7 +95,7 @@ class BreakdownSceneOperations(HookBaseClass):
 
         Toolkit will scan the list of items, see if any of the objects matches
         any templates and try to determine if there is a more recent version
-        available. Any such versions are then displayed in the UI as out of 
+        available. Any such versions are then displayed in the UI as out of
         date.
         """
 
@@ -185,7 +175,7 @@ class BreakdownSceneOperations(HookBaseClass):
 
                 for usage in res_info["usages"]:
                     new_url = engine.app.import_project_resource(
-                        new_path, usage, "Shotgun"
+                        new_path, usage, "ShotGrid"
                     )
 
                     engine.log_debug("Updating usage: %s" % usage)

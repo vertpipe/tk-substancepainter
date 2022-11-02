@@ -1,13 +1,3 @@
-# Copyright (c) 2013 Shotgun Software Inc.
-#
-# CONFIDENTIAL AND PROPRIETARY
-#
-# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
-# Source Code License included in this distribution package. See LICENSE.
-# By accessing, using, copying or modifying this work you indicate your
-# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
-# not expressly granted therein are reserved by Shotgun Software Inc.
-
 import os
 import sys
 import shutil
@@ -215,7 +205,7 @@ class SubstancePainterLauncher(SoftwareLauncher):
 
     EXECUTABLE_TEMPLATES = {
         "darwin": ["/Applications/Allegorithmic/Substance Painter.app"],
-        "win32": ["C:/Program Files/Allegorithmic/Substance Painter/Substance Painter.exe"],
+        "win32": ["C:/Program Files/Adobe/Adobe Substance 3D Painter/Adobe Substance 3D Painter.exe"],
         "linux2": [
             "/usr/Allegorithmic/Substance Painter",
             "/usr/Allegorithmic/Substance_Painter/Substance Painter",

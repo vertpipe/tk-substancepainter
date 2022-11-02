@@ -1,13 +1,3 @@
-# Copyright (c) 2017 Shotgun Software Inc.
-#
-# CONFIDENTIAL AND PROPRIETARY
-#
-# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
-# Source Code License included in this distribution package. See LICENSE.
-# By accessing, using, copying or modifying this work you indicate your
-# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
-# not expressly granted therein are reserved by Shotgun Software Inc.
-
 import os
 
 import sgtk
@@ -23,7 +13,7 @@ HookBaseClass = sgtk.get_hook_baseclass()
 
 class SubstancePainterStartVersionControlPlugin(HookBaseClass):
     """
-    Simple plugin to insert a version number into the Substance Painter file 
+    Simple plugin to insert a version number into the Substance Painter file
     path if one does not exist.
     """
 
@@ -71,7 +61,7 @@ class SubstancePainterStartVersionControlPlugin(HookBaseClass):
         List of item types that this plugin is interested in.
 
         Only items matching entries in this list will be presented to the
-        accept() method. Strings can contain glob patters such as *, for 
+        accept() method. Strings can contain glob patters such as *, for
         example ["substancepainter.*", "file.substancepainter"]
         """
         return ["substancepainter.session"]
@@ -116,7 +106,7 @@ class SubstancePainterStartVersionControlPlugin(HookBaseClass):
                 it will be unchecked. Optional, True by default.
 
         :param settings: Dictionary of Settings. The keys are strings, matching
-                         the keys returned in the settings property. 
+                         the keys returned in the settings property.
                          The values are `Setting` instances.
         :param item: Item to process
 
@@ -161,7 +151,7 @@ class SubstancePainterStartVersionControlPlugin(HookBaseClass):
         Returns a boolean to indicate validity.
 
         :param settings: Dictionary of Settings. The keys are strings, matching
-                         the keys returned in the settings property. 
+                         the keys returned in the settings property.
                          The values are `Setting` instances.
         :param item: Item to process
 
@@ -201,7 +191,7 @@ class SubstancePainterStartVersionControlPlugin(HookBaseClass):
         Executes the publish logic for the given item and settings.
 
         :param settings: Dictionary of Settings. The keys are strings, matching
-                         the keys returned in the settings property. 
+                         the keys returned in the settings property.
                          The values are `Setting` instances.
         :param item: Item to process
         """
@@ -232,7 +222,7 @@ class SubstancePainterStartVersionControlPlugin(HookBaseClass):
         be used to version up files.
 
         :param settings: Dictionary of Settings. The keys are strings, matching
-                         the keys returned in the settings property. 
+                         the keys returned in the settings property.
                          The values are `Setting` instances.
         :param item: Item to process
         """
@@ -285,7 +275,7 @@ def _session_path():
     # get the path to the current file
     path = engine.app.get_current_project_path()
 
-    if isinstance(path, unicode):
+    if isinstance(path, bytes):
         path = path.encode("utf-8")
 
     return path
