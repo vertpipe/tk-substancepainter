@@ -27,7 +27,7 @@ __contact__ = "https://www.linkedin.com/in/diegogh/"
 # when Substance Painter software version is above the tested one.
 SHOW_COMP_DLG = "SGTK_COMPATIBILITY_DIALOG_SHOWN"
 
-MINIMUM_SUPPORTED_VERSION = "2018.3"
+MINIMUM_SUPPORTED_VERSION = "8.2.0"
 
 
 def to_new_version_system(version):
