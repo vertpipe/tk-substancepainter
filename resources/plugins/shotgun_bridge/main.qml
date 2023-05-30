@@ -1,4 +1,4 @@
-// Substance Painter plugin to communicate with it's related Shotgun engine.
+// Substance Painter plugin to communicate with it's related ShotGrid engine.
 // The idea is to communicate with the engine through websockets since
 // the engine is written in python.
 
@@ -19,7 +19,7 @@ PainterPlugin
   id: root
   property var openMenuButton: null
   property bool isEngineLoaded: false
-  // property double shotgun_heartbeat_interval: 1.0; 
+  // property double shotgun_heartbeat_interval: 1.0;
   property bool debug: true;
 
   function log_info(data)
@@ -28,18 +28,18 @@ PainterPlugin
     if (data.hasOwnProperty("message"))
         message = data.message;
 
-    alg.log.info("Shotgun engine | " + message.toString());
+    alg.log.info("ShotGrid engine | " + message.toString());
   }
- 
+
   function log_warning(data)
   {
     var message =  data.message ? ("message" in data) : data;
     if (data.hasOwnProperty("message"))
         message = data.message;
 
-    alg.log.warning("Shotgun engine | " + message.toString());
+    alg.log.warning("ShotGrid engine | " + message.toString());
   }
- 
+
   function log_debug(data)
   {
     var message =  data.message ? ("message" in data) : data;
@@ -47,30 +47,30 @@ PainterPlugin
         message = data.message;
 
     if (root.debug)
-      alg.log.info("(DEBUG) Shotgun engine | " + message.toString());
+      alg.log.info("(DEBUG) ShotGrid engine | " + message.toString());
   }
- 
+
   function log_error(data)
   {
     var message =  data.message ? ("message" in data) : data;
     if (data.hasOwnProperty("message"))
         message = data.message;
 
-    alg.log.error("Shotgun engine | " + message.toString());
+    alg.log.error("ShotGrid engine | " + message.toString());
   }
- 
+
   function log_exception(data)
   {
     var message =  data.message ? ("message" in data) : data;
     if (data.hasOwnProperty("message"))
         message = data.message;
 
-    alg.log.exception("Shotgun engine | " + message.toString());
+    alg.log.exception("ShotGrid engine | " + message.toString());
   }
 
   Component.onCompleted:
   {
-    log_debug("Initializing Shotgun Bridge Plugin.");
+    log_debug("Initializing ShotGrid Bridge Plugin.");
 
     // get the port we have been assigned from sthe startup software launcher
     var args = Qt.application.arguments[1];
@@ -82,12 +82,12 @@ PainterPlugin
     {
       // we are not in a shotgun toolkit environment, so we bail out as soon as
       // possible
-      log_warning("Not in an shotgun toolkit environment so the engine won't be run. Have you launched Substance Painter through the Shotgun Desktop application ?");
+      log_warning("Not in an shotgun toolkit environment so the engine won't be run. Have you launched Substance Painter through the ShotGrid Desktop application ?");
       return;
     }
 
     var sgtk_substancepainter_engine_port = query.SGTK_SUBSTANCEPAINTER_ENGINE_PORT;
-    
+
     server.port = parseInt(sgtk_substancepainter_engine_port);
     log_debug("Engine port:" + server.port);
     server.listen = true;
@@ -98,7 +98,7 @@ PainterPlugin
     openMenuButton.enabled = Qt.binding(function() { return root.isEngineLoaded; });
     openMenuButton.isEngineLoaded = Qt.binding(function() { return root.isEngineLoaded; });
 
-    // We initialize here the engine instead of when the app has finished 
+    // We initialize here the engine instead of when the app has finished
     // loading because the user can always reload the plugin from the Plugins
     // menu and that event does not get called in that case.
     if (!isEngineLoaded)
@@ -152,7 +152,7 @@ PainterPlugin
           params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
       }
     }
-    catch (err) 
+    catch (err)
     {
     }
 
@@ -163,7 +163,7 @@ PainterPlugin
   function onProcessEndedCallback(result)
   {
     // We try to keep the engine alive by restarting it if something went wrong.
-    log_warning("Shotgun Substance Painter Engine connection was lost. Restarting engine...");
+    log_warning("ShotGrid Substance Painter Engine connection was lost. Restarting engine...");
     if (result.crashed)
     {
       bootstrapEngine();
@@ -181,12 +181,12 @@ PainterPlugin
 
     var sgtk_substancepainter_engine_startup = '"' + query.SGTK_SUBSTANCEPAINTER_ENGINE_STARTUP+ '"'
     var sgtk_substancepainter_engine_python = '"' + query.SGTK_SUBSTANCEPAINTER_ENGINE_PYTHON + '"'
-    
+
     log_debug("Starting tk-substancepainter engine with params: " + sgtk_substancepainter_engine_python + " " + sgtk_substancepainter_engine_startup)
     alg.subprocess.start(sgtk_substancepainter_engine_python + " " + sgtk_substancepainter_engine_startup, onProcessEndedCallback)
   }
 
-  function checkConnection(data) 
+  function checkConnection(data)
   {
       // TODO: check if the subprocess where the engine is running is still alive.
       // Might not be needed as if we use a callback in the start of the process
@@ -194,13 +194,13 @@ PainterPlugin
       // when the client drops it's connection.
   }
 
-  function displayMenu(data) 
+  function displayMenu(data)
   {
     // tells the engine to show the menu
     server.sendCommand("DISPLAY_MENU", {clickedPosition: root.openMenuButton.clickedPosition});
   }
 
- function sendProjectInfo() 
+ function sendProjectInfo()
  {
     try
     {
@@ -211,48 +211,48 @@ PainterPlugin
     catch(err) {}
   }
 
-  function disconnect() 
+  function disconnect()
   {
     root.isEngineLoaded = false;
 
-    log_warning("Shotgun Substance Painter Engine connection was lost. Reconnecting ...");
+    log_warning("ShotGrid Substance Painter Engine connection was lost. Reconnecting ...");
     bootstrapEngine();
   }
 
-  function getVersion(data) 
+  function getVersion(data)
   {
     return {
              painter: alg.version.painter,
              api: alg.version.api
            };
   }
-  
-  function engineReady(data) 
+
+  function engineReady(data)
   {
-    log_info("Engine is ready.")  
+    log_info("Engine is ready.")
     root.isEngineLoaded = true;
-    
+
     // update the engine context accoding to the current project loaded
     server.sendCommand("PROJECT_OPENED", {path:currentProjectPath()});
   }
 
-  function cleanUrl(url) 
+  function cleanUrl(url)
   {
     return alg.fileIO.localFileToUrl(alg.fileIO.urlToLocalFile(url));
   }
 
-  function openProject(data) 
+  function openProject(data)
   {
     var projectOpened = alg.project.isOpen();
     var isAlreadyOpen = false;
 
     var url = alg.fileIO.localFileToUrl(data.path);
 
-    try 
+    try
     {
       isAlreadyOpen = cleanUrl(alg.project.url()) == cleanUrl(url);
     }
-    catch (err) 
+    catch (err)
     {
       alg.log.exception(err);
     }
@@ -266,11 +266,11 @@ PainterPlugin
         {
           // TODO: Ask the user if he wants to save its current opened project
           alg.project.close();
-        }    
+        }
         alg.project.open(url);
       }
     }
-    catch (err) 
+    catch (err)
     {
       alg.log.exception(err)
       return false;
@@ -281,7 +281,7 @@ PainterPlugin
 
   function currentProjectPath(data)
   {
-    try 
+    try
     {
       var projectOpened = alg.project.isOpen();
       if (projectOpened)
@@ -292,7 +292,7 @@ PainterPlugin
       else
       {
         return "Untitled.spp"
-      }    
+      }
     }
     catch (err)
     {
@@ -313,7 +313,7 @@ PainterPlugin
       else
       {
         return null;
-      }    
+      }
     }
     catch (err)
     {
@@ -321,7 +321,7 @@ PainterPlugin
     }
   }
 
-  
+
   function saveProjectAs(data)
   {
     try
@@ -350,7 +350,7 @@ PainterPlugin
       alg.log.exception(err)
       return false;
     }
-    
+
     return true;
   }
 
@@ -365,7 +365,7 @@ PainterPlugin
       alg.log.exception(err)
       return false;
     }
-    
+
     return false;
   }
 
@@ -396,7 +396,7 @@ PainterPlugin
       alg.log.exception(err)
       return false;
     }
-    
+
     return false;
   }
 
@@ -405,12 +405,12 @@ PainterPlugin
     try
     {
       var result = alg.resources.importProjectResource(data.path, [data.usage], data.destination);
-      
-      // we store the info as a project settings as it will be reused later 
+
+      // we store the info as a project settings as it will be reused later
       // when tk-multi-breakdown tries to figure out what resources are
       // up to date and which are not.
 
-      var settings = alg.project.settings.value("tk-multi-loader2", {});    
+      var settings = alg.project.settings.value("tk-multi-loader2", {});
       settings[result] = data.path;
 
       alg.project.settings.setValue("tk-multi-loader2", settings);
@@ -421,7 +421,7 @@ PainterPlugin
     {
       alg.log.exception(err)
     }
-    
+
     return null;
   }
 
@@ -524,7 +524,7 @@ PainterPlugin
       //checkConnectionTimer.start();
     }
 
-    onConnectedChanged: 
+    onConnectedChanged:
     {
       if (!connected)
       {

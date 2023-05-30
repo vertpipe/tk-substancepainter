@@ -1,13 +1,3 @@
-# Copyright (c) 2013 Shotgun Software Inc.
-#
-# CONFIDENTIAL AND PROPRIETARY
-#
-# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
-# Source Code License included in this distribution package. See LICENSE.
-# By accessing, using, copying or modifying this work you indicate your
-# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
-# not expressly granted therein are reserved by Shotgun Software Inc.
-
 """A Substance Painter engine for Tank.
 https://www.allegorithmic.com/products/substance-painter
 """
@@ -37,7 +27,7 @@ __contact__ = "https://www.linkedin.com/in/diegogh/"
 # when Substance Painter software version is above the tested one.
 SHOW_COMP_DLG = "SGTK_COMPATIBILITY_DIALOG_SHOWN"
 
-MINIMUM_SUPPORTED_VERSION = "2018.3"
+MINIMUM_SUPPORTED_VERSION = "8.2.0"
 
 
 def to_new_version_system(version):
@@ -79,23 +69,23 @@ def to_new_version_system(version):
 # logging functionality
 def display_error(msg):
     t = time.asctime(time.localtime())
-    print("%s - Shotgun Error | Substance Painter engine | %s " % (t, msg))
+    print("%s - ShotGrid Error | Substance Painter engine | %s " % (t, msg))
 
 
 def display_warning(msg):
     t = time.asctime(time.localtime())
-    print("%s - Shotgun Warning | Substance Painter engine | %s " % (t, msg))
+    print("%s - ShotGrid Warning | Substance Painter engine | %s " % (t, msg))
 
 
 def display_info(msg):
     t = time.asctime(time.localtime())
-    print("%s - Shotgun Info | Substance Painter engine | %s " % (t, msg))
+    print("%s - ShotGrid Info | Substance Painter engine | %s " % (t, msg))
 
 
 def display_debug(msg):
     if os.environ.get("TK_DEBUG") == "1":
         t = time.asctime(time.localtime())
-        print("%s - Shotgun Debug | Substance Painter engine | %s " % (t, msg))
+        print("%s - ShotGrid Debug | Substance Painter engine | %s " % (t, msg))
 
 
 # methods to support the state when the engine cannot start up
@@ -123,9 +113,9 @@ def refresh_engine(scene_name, prev_context):
         if prev_context and prev_context != engine.context:
             engine.change_context(prev_context)
 
-        # shotgun menu may have been removed, so add it back in if its not
+        # shotgrid menu may have been removed, so add it back in if its not
         # already there.
-        engine.create_shotgun_menu()
+        engine.create_shotgrid_menu()
         return
 
     # determine the tk instance and ctx to use:
@@ -146,9 +136,9 @@ def refresh_engine(scene_name, prev_context):
             # for menus if it exists
             ctx = engine.sgtk.context_from_entity_dictionary(engine.context.project)
             message = (
-                "Shotgun Substance Painter Engine could not detect "
+                "ShotGrid Substance Painter Engine could not detect "
                 "the context\n from the project loaded. "
-                "Shotgun menus will be reset \n"
+                "ShotGrid menus will be reset \n"
                 "to the project '%s' "
                 "context."
                 "\n" % engine.context.project.get("name")
@@ -158,23 +148,23 @@ def refresh_engine(scene_name, prev_context):
         except tank.TankError as e:
             (exc_type, exc_value, exc_traceback) = sys.exc_info()
             message = ""
-            message += "Shotgun Substance Painter Engine cannot be started:.\n"
+            message += "ShotGrid Substance Painter Engine cannot be started:.\n"
             message += "Please contact support@shotgunsoftware.com\n\n"
             message += "Exception: %s - %s\n" % (exc_type, exc_value)
             message += "Traceback (most recent call last):\n"
             message += "\n".join(traceback.format_tb(exc_traceback))
 
             # disabled menu, could not get project context
-            engine.create_shotgun_menu(disabled=True)
+            engine.create_shotgrid_menu(disabled=True)
             engine.show_error(message)
             return
 
     if ctx != engine.context:
         engine.change_context(ctx)
 
-    # shotgun menu may have been removed,
+    # shotgrid menu may have been removed,
     # so add it back in if its not already there.
-    engine.create_shotgun_menu()
+    engine.create_shotgrid_menu()
 
 
 class SubstancePainterEngine(Engine):
@@ -217,7 +207,7 @@ class SubstancePainterEngine(Engine):
             dlg = QtWidgets.QMessageBox(self._qt_app_central_widget)
             dlg.setIcon(level_icon[level])
             dlg.setText(msg)
-            dlg.setWindowTitle("Shotgun Substance Painter Engine")
+            dlg.setWindowTitle("ShotGrid Substance Painter Engine")
             dlg.setWindowFlags(dlg.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
             dlg.show()
             dlg.exec_()
@@ -290,7 +280,7 @@ class SubstancePainterEngine(Engine):
     def __register_open_log_folder_command(self):
         """
         # add a 'open log folder' command to the engine's context menu
-        # note: we make an exception for the shotgun engine which is a
+        # note: we make an exception for the shotgrid engine which is a
         # special case.
         """
         if self.name != SHOTGUN_ENGINE_NAME:
@@ -441,9 +431,9 @@ class SubstancePainterEngine(Engine):
                 "are Mac, Linux 64 and Windows 64."
             )
 
-        # default menu name is Shotgun but this can be overridden
+        # default menu name is ShotGrid but this can be overridden
         # in the configuration to be sgtk in case of conflicts
-        self._menu_name = "Shotgun"
+        self._menu_name = "ShotGrid"
         if self.get_setting("use_sgtk_as_menu_name", False):
             self._menu_name = "Sgtk"
 
@@ -457,16 +447,16 @@ class SubstancePainterEngine(Engine):
 
         if painter_version < painter_min_supported_version:
             msg = (
-                "Shotgun integration is not compatible with Substance Painter versions"
+                "ShotGrid integration is not compatible with Substance Painter versions"
                 " older than %s" % MINIMUM_SUPPORTED_VERSION
             )
             raise tank.TankError(msg)
 
         if painter_version > painter_min_supported_version:
             # show a warning that this version of Substance Painter isn't yet fully tested
-            # with Shotgun:
+            # with ShotGrid:
             msg = (
-                "The Shotgun Pipeline Toolkit has not yet been fully "
+                "The ShotGrid Pipeline Toolkit has not yet been fully "
                 "tested with Substance Painter %s.  "
                 "You can continue to use Toolkit but you may experience "
                 "bugs or instability."
@@ -509,14 +499,14 @@ class SubstancePainterEngine(Engine):
                 )
                 os.environ["SHOTGUN_SKIP_QTWEBENGINEWIDGETS_IMPORT"] = "1"
 
-    def create_shotgun_menu(self, disabled=False):
+    def create_shotgrid_menu(self, disabled=False):
         """
-        Creates the main shotgun menu in substancepainter.
+        Creates the main shotgrid menu in substancepainter.
         Note that this only creates the menu, not the child actions
         :return: bool
         """
 
-        # only create the shotgun menu if not in batch mode and menu doesn't
+        # only create the shotgrid menu if not in batch mode and menu doesn't
         # already exist
         if self.has_ui:
             # create our menu handler
@@ -532,7 +522,7 @@ class SubstancePainterEngine(Engine):
 
     def display_menu(self, pos=None):
         """
-        Shows the engine Shotgun menu.
+        Shows the engine ShotGrid menu.
         """
         if self._menu_generator:
             self._menu_generator.show(pos)
@@ -569,8 +559,8 @@ class SubstancePainterEngine(Engine):
         # Run a series of app instance commands at startup.
         self._run_app_instance_commands()
 
-        # Create the shotgun menu
-        self.create_shotgun_menu()
+        # Create the shotgrid menu
+        self.create_shotgrid_menu()
 
         # Let the app know we are ready for action!
         self._dcc_app.broadcast_event("ENGINE_READY")
@@ -602,7 +592,7 @@ class SubstancePainterEngine(Engine):
         if self.get_setting("automatic_context_switch", True):
             # finally create the menu with the new context if needed
             if old_context != new_context:
-                self.create_shotgun_menu()
+                self.create_shotgrid_menu()
 
     def _run_app_instance_commands(self):
         """
@@ -724,13 +714,13 @@ class SubstancePainterEngine(Engine):
         :type record: :class:`~python.logging.LogRecord`
         """
         # Give a standard format to the message:
-        #     Shotgun <basename>: <message>
+        #     ShotGrid <basename>: <message>
         # where "basename" is the leaf part of the logging record name,
         # for example "tk-multi-shotgunpanel" or "qt_importer".
         if record.levelno < logging.INFO:
-            formatter = logging.Formatter("Debug: Shotgun %(basename)s: %(message)s")
+            formatter = logging.Formatter("Debug: ShotGrid %(basename)s: %(message)s")
         else:
-            formatter = logging.Formatter("Shotgun %(basename)s: %(message)s")
+            formatter = logging.Formatter("ShotGrid %(basename)s: %(message)s")
 
         msg = formatter.format(record)
 

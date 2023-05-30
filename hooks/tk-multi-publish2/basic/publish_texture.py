@@ -1,13 +1,3 @@
-# Copyright (c) 2017 Shotgun Software Inc.
-#
-# CONFIDENTIAL AND PROPRIETARY
-#
-# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
-# Source Code License included in this distribution package. See LICENSE.
-# By accessing, using, copying or modifying this work you indicate your
-# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
-# not expressly granted therein are reserved by Shotgun Software Inc.
-
 import os
 import pprint
 
@@ -43,11 +33,11 @@ class SubstancePainterTexturesPublishPlugin(HookBaseClass):
         contain simple html for formatting.
         """
 
-        loader_url = "https://support.shotgunsoftware.com/hc/en-us/articles/219033078"
+        loader_url = "https://developer.shotgridsoftware.com/a4c0a4f1/?title=Loader"
 
         return """
-        Publishes the file to Shotgun. A <b>Publish</b> entry will be
-        created in Shotgun which will include a reference to the file's current
+        Publishes the file to ShotGrid. A <b>Publish</b> entry will be
+        created in ShotGrid which will include a reference to the file's current
         path on disk. If a publish template is configured, a copy of the
         current session will be copied to the publish template path which
         will be the file that is published. Other users will be able to access
@@ -62,7 +52,7 @@ class SubstancePainterTexturesPublishPlugin(HookBaseClass):
         file to the next version after publishing.
 
         The <code>version</code> field of the resulting <b>Publish</b> in
-        Shotgun will also reflect the version number identified in the filename
+        ShotGrid will also reflect the version number identified in the filename
         The basic worklfow recognizes the following version formats by default:
 
         <ul>
@@ -140,7 +130,7 @@ class SubstancePainterTexturesPublishPlugin(HookBaseClass):
         List of item types that this plugin is interested in.
 
         Only items matching entries in this list will be presented to the
-        accept() method. Strings can contain glob patters such as *, for 
+        accept() method. Strings can contain glob patters such as *, for
         example ["substancepainter.*", "file.substancepainter"]
         """
         return ["substancepainter.texture"]
@@ -148,7 +138,7 @@ class SubstancePainterTexturesPublishPlugin(HookBaseClass):
     def accept(self, settings, item):
         """
         Method called by the publisher to determine if an item is of any
-        interest to this plugin. Only items matching the filters defined via 
+        interest to this plugin. Only items matching the filters defined via
         the item_filters property will be presented to this method.
 
         A publish task will be generated for each item accepted here. Returns a
@@ -188,7 +178,7 @@ class SubstancePainterTexturesPublishPlugin(HookBaseClass):
         boolean to indicate validity.
 
         :param settings: Dictionary of Settings. The keys are strings, matching
-                         the keys returned in the settings property. The values 
+                         the keys returned in the settings property. The values
                          are `Setting` instances.
         :param item: Item to process
         :returns: True if item is valid, False otherwise.
@@ -261,7 +251,7 @@ class SubstancePainterTexturesPublishPlugin(HookBaseClass):
 
         sgtk.util.filesystem.copy_file(src, publish_path)
 
-        self.logger.info("A Publish will be created in Shotgun and linked to:")
+        self.logger.info("A Publish will be created in ShotGrid and linked to:")
         self.logger.info("  %s" % (publish_path,))
 
         # arguments for publish registration
@@ -329,15 +319,15 @@ class SubstancePainterTexturesPublishPlugin(HookBaseClass):
 
     def _find_publishes(self, ctx, publish_name, publish_type):
         """
-        Given a context, publish name and type, find all publishes from Shotgun
+        Given a context, publish name and type, find all publishes from ShotGrid
         that match.
-        
+
         :param ctx:             Context to use when looking for publishes
         :param publish_name:    The name of the publishes to look for
         :param publish_type:    The type of publishes to look for
-        
-        :returns:               A list of Shotgun publish records that match the search
-                                criteria        
+
+        :returns:               A list of ShotGrid publish records that match the search
+                                criteria
         """
         publish_entity_type = sgtk.util.get_published_file_entity_type(self.parent.sgtk)
         if publish_entity_type == "PublishedFile":
@@ -358,14 +348,14 @@ class SubstancePainterTexturesPublishPlugin(HookBaseClass):
         if publish_type:
             filters.append([publish_type_field, "is", publish_type])
 
-        # retrieve a list of all matching publishes from Shotgun:
+        # retrieve a list of all matching publishes from ShotGrid:
         sg_publishes = []
         try:
             query_fields = ["version_number"]
             sg_publishes = self.parent.shotgun.find(
                 publish_entity_type, filters, query_fields
             )
-        except Exception, e:
+        except Exception as e:
             self.logger.error(
                 "Failed to find publishes of type '%s', called '%s', for context %s: %s"
                 % (publish_name, publish_type, ctx, e)
@@ -383,7 +373,7 @@ def _export_path():
     # get the path to the current file
     path = engine.app.get_project_export_path()
 
-    if isinstance(path, unicode):
+    if isinstance(path, str):
         path = path.encode("utf-8")
 
     return path
