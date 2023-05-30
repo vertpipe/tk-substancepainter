@@ -160,7 +160,7 @@ In order for our application to show up in the shotgun launcher, we need to add 
 
 * We now sould specify the engine this software will use. "tk-substancepainter"
 ![software_specify_engine](config/images/software_specify_engine.png)
-
+* And you need to add the current Adobe Substance 3D painter path to "windows path", like `C:/Program Files/Adobe/Adobe Substance 3D Painter/Adobe Substance 3D Painter.exe`
 * Note that you can restrict this application to certain projects by specifying the project under the projects column. If no projects are specified this application will show up for all the projects that have this engine in their configuration files.
 
 If you want more information on how to configure software launches, here is the detailed documentation from shotgun.
