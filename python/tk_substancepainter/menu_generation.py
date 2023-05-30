@@ -280,7 +280,7 @@ class AppCommand(object):
             if six.PY3:
                 from pyreadline.py3k_compat import unicode
 
-            if doc_url.__class__ == unicode:
+            if not isinstance(doc_url, str):
                 doc_url = unicodedata.normalize("NFKD", doc_url).encode(
                     "ascii", "ignore"
                 )

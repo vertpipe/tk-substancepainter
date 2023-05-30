@@ -3,6 +3,7 @@ import sys
 import shutil
 import hashlib
 import six
+import re
 import socket
 from distutils.version import LooseVersion
 
@@ -305,7 +306,7 @@ class SubstancePainterLauncher(SoftwareLauncher):
 
         else:
             user_scripts_path = os.path.expanduser(
-                r"~/Documents/Allegorithmic/Substance Painter/plugins"
+                r"~/Documents/Adobe/Adobe Substance 3D Painter/plugins"
             )
 
         ensure_scripts_up_to_date(resources_plugins_path, user_scripts_path)
@@ -322,7 +323,7 @@ class SubstancePainterLauncher(SoftwareLauncher):
         """
 
         # the engine icon
-        engine_icon = os.path.join(self.disk_location, "icon_256.png")
+        engine_icon = os.path.join(self.disk_location, "resources/python-doc/_static/pt_appicon_256.png")
         return engine_icon
 
     def _is_supported(self, sw_version):
@@ -358,10 +359,13 @@ class SubstancePainterLauncher(SoftwareLauncher):
         # we support cases were we could not extract the version number
         # from the binary/executable
         if sw_version.version == UNKNOWN_VERSION:
-            return (True, "")
+            return True, ""
 
         # convert to new version system if required
         version = to_new_version_system(sw_version.version)
+
+        if version is None:
+            return True, "Invalid vsersion"
 
         # second, compare against the minimum version
         if self.minimum_supported_version:
@@ -392,7 +396,7 @@ class SubstancePainterLauncher(SoftwareLauncher):
             )
 
         # passed all checks. must be supported!
-        return (True, "")
+        return True, ""
 
     def scan_software(self):
         """
@@ -452,9 +456,9 @@ class SubstancePainterLauncher(SoftwareLauncher):
                 )
                 sw_versions.append(
                     SoftwareVersion(
-                        executable_version,
+                        "",
                         "Substance Painter",
-                        executable_path,
+                        executable_template,
                         self._icon_from_engine(),
                     )
                 )

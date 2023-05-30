@@ -373,7 +373,7 @@ def _export_path():
     # get the path to the current file
     path = engine.app.get_project_export_path()
 
-    if isinstance(path, str):
+    if not isinstance(path, str):
         path = path.encode("utf-8")
 
     return path
